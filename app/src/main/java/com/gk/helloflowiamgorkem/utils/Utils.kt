@@ -1,4 +1,4 @@
-package utils
+package com.gk.helloflowiamgorkem.utils
 
 object Utils {
     const val apiKey = "v8GI-i7eZcVi5JvZthXGl885VLvICu2tls6NOtf2-gM"
