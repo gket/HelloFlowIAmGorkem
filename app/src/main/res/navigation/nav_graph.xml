@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/home">
+
+    <fragment
+        android:id="@+id/home"
+        android:name="com.gk.helloflowiamgorkem.ui.home.HomeFragment"
+        android:label="@string/text_home"
+        tools:layout="@layout/fragment_home">
+    </fragment>
+
+    <fragment
+        android:id="@+id/photos"
+        android:name="com.gk.helloflowiamgorkem.ui.photo_library.PhotoLibraryFragment"
+        android:label="@string/text_photos"
+        tools:layout="@layout/fragment_photos">
+    </fragment>
+
+    <fragment
+        android:id="@+id/favorites"
+        android:name="com.gk.helloflowiamgorkem.ui.favorite.FavoriteFragment"
+        android:label="@string/text_favorites"
+        tools:layout="@layout/fragment_favorite">
+    </fragment>
+
+</navigation>
