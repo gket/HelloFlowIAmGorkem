@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import retrofit2.Response
 
 class HomeViewModel @ViewModelInject constructor(
     @Assisted private val savedStateHandle: SavedStateHandle,
@@ -23,23 +22,12 @@ class HomeViewModel @ViewModelInject constructor(
     private val _uiState = MutableStateFlow<Resource<UnsplashPhoto>>(Resource.Loading())
     val uiState: StateFlow<Resource<UnsplashPhoto>> = _uiState
 
-    fun getRandomPhoto(delayInterval: Long) {
+    fun getRandomPhoto() {
         viewModelScope.launch {
             repository.getRandomPhoto().collect {
-                delay(delayInterval)
-                _uiState.value = Resource.Loading()
-                handlePhotoResponse(it)
+                delay(10000)
+               _uiState.value = it
             }
-        }
-    }
-
-    fun handlePhotoResponse(response: Response<UnsplashPhoto>) {
-        if (response.isSuccessful) {
-            response.body().let {
-                _uiState.value = Resource.Success(it)
-            }
-        } else {
-            _uiState.value = Resource.Error(response.message().toString())
         }
     }
 

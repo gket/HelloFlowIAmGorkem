@@ -32,14 +32,14 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        homeViewModel.getRandomPhoto(0)
+        homeViewModel.getRandomPhoto()
         lifecycleScope.launchWhenCreated {
             homeViewModel.uiState.collect {
                 when (it) {
                     is Resource.Success -> {
                         updateImage(it.data?.url?.full)
                         updateDescription(it.data?.description)
-                        homeViewModel.getRandomPhoto(10000)
+                        homeViewModel.getRandomPhoto()
                     }
                     is Resource.Error -> {
                         Log.d("ResourceState:", "Error:" + it.message.toString())
