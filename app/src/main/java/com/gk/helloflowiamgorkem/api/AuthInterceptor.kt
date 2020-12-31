@@ -7,7 +7,7 @@ object AuthInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val apiKey = "v8GI-i7eZcVi5JvZthXGl885VLvICu2tls6NOtf2-gM"
         val requestBuilder = chain.request().newBuilder()
-        requestBuilder.addHeader("Authorization", apiKey)
+        requestBuilder.addHeader("Authorization", "Client-ID $apiKey")
         return chain.proceed(requestBuilder.build())
     }
 }
