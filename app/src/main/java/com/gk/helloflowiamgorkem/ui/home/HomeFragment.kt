@@ -14,7 +14,6 @@ import com.gk.helloflowiamgorkem.adapter.PhotoCardAdapter
 import com.gk.helloflowiamgorkem.data.UnsplashPhoto
 import com.gk.helloflowiamgorkem.databinding.FragmentHomeBinding
 import com.gk.helloflowiamgorkem.di.GlideApp
-import com.gk.helloflowiamgorkem.utils.Resource
 import com.gk.helloflowiamgorkem.utils.WiwwCompositePageTransformer
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.blurry.Blurry
@@ -34,6 +33,7 @@ class HomeFragment : Fragment() {
     private val homeViewModel by viewModels<HomeViewModel>()
     private var firstPosition = 0
     private var controlPosition = 0
+    private var dummyIsClicked = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,18 +46,27 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        homeViewModel.getRandomPhoto()
+        binding.imageView.setOnClickListener { homeViewModel.shuffle() }
         lifecycleScope.launchWhenCreated {
             homeViewModel.uiState.collect {
                 when (it) {
-                    is Resource.Success -> {
+                    is HomeUiDisplayer.Success -> {
                         it.data?.let { photos -> updateImages(photos) }
                     }
-                    is Resource.Error -> {
+                    is HomeUiDisplayer.Error -> {
                         Log.d("ResourceState:", "Error:" + it.message.toString())
                     }
-                    is Resource.Loading -> {
+                    is HomeUiDisplayer.Loading -> {
                         Log.d("ResourceState:", "Loading:")
+                    }
+                    is HomeUiDisplayer.ShuffleClicking -> {
+                        binding.imageView.setBackgroundColor(
+                            HomeUiState.getShuffleColor(
+                                binding.root.context,
+                                dummyIsClicked
+                            )
+                        )
+                        dummyIsClicked = !dummyIsClicked
                     }
                     else -> Log.d("ResourceState:", "Unexpected")
                 }
