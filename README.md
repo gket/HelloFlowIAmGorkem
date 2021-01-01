@@ -1,26 +1,46 @@
 # HelloFlowIAmGorkem
 Hello Flow I Am Gorkem!
 
-I will work on 
+#MVVM Photo Application
+
+This project includes :
+
+-MVVM
 
 -Coroutine Flow 
 
 -Dagger Hilt
 
--Room
+-Navigation
+
+-ViewBinding
+
+-ViewPager
+
+-UiStates(UiDisplaye)
+
+-Action Structure
+
+______________________________
+
+LIBS TODO : 
 
 -Paging
 
--Navigation
+-Room
 
--ViewBinding etc. in this repo.
+______________________________
 
 # About App
 
 App will include 3 main features.
 
-Home : It will include Random photo from api. The photo will change in a 30 seconds. And user can change random photo time or count.
+#Home : It includes Random 5 photos from api. User can change to these photos via shuffle button. [IN PROGRESS]
 
-Photos : It will include Photos from api and search feature. (Pagination etc.)
+______________________________
 
-Favorites : It will include favorite photos. 
+APP TODO :
+
+Photos : It will include Photos from api and search feature. (Pagination etc.) [TODO]
+
+Favorites : It will include favorite photos. [TODO]
