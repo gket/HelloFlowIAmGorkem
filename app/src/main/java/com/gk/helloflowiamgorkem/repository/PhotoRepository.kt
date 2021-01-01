@@ -7,15 +7,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class PhotoRepository(private val unsplashApiService: UnsplashApiService) {
-    fun getRandomPhoto(): Flow<Resource<UnsplashPhoto>> =
-        flow{
-
+    fun getRandomPhoto(): Flow<Resource<List<UnsplashPhoto>>> =
+        flow {
             emit(Resource.Loading())
-            val response = unsplashApiService.getRandomPhotos()
+            val response = unsplashApiService.getRandomPhotos(5)
             if (response.isSuccessful) {
-                response.body().let {
-                    emit(Resource.Success(response.body()))
-                }
+                emit(Resource.Success(response.body()))
             } else {
                 emit(Resource.Error(response.message()))
             }
