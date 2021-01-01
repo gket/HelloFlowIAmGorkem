@@ -7,10 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gk.helloflowiamgorkem.data.UnsplashPhoto
 import com.gk.helloflowiamgorkem.repository.PhotoRepository
-import com.gk.helloflowiamgorkem.utils.Resource
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class HomeViewModel @ViewModelInject constructor(
@@ -18,15 +15,33 @@ class HomeViewModel @ViewModelInject constructor(
     private val repository: PhotoRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<Resource<List<UnsplashPhoto>>>(Resource.Loading())
-    val uiState: StateFlow<Resource<List<UnsplashPhoto>>> = _uiState
+    private val _uiState = MutableStateFlow<HomeUiDisplayer<List<UnsplashPhoto>>>(HomeUiDisplayer.Loading())
+    val uiState: StateFlow<HomeUiDisplayer<List<UnsplashPhoto>>> = _uiState
+    private val _action =
+        MutableStateFlow<HomeActionLayer>(HomeActionLayer.ShuffleClicked)
+    private val actionState: StateFlow<HomeActionLayer> = _action
 
-    fun getRandomPhoto() {
+    init {
+        getRandomPhoto()
+    }
+
+    private fun getRandomPhoto() {
         viewModelScope.launch {
             repository.getRandomPhoto().collect {
-               _uiState.value = it
+                _uiState.value = it
             }
         }
     }
+
+    fun shuffle() {
+        _uiState.value = HomeUiDisplayer.ShuffleClicking()
+        getRandomPhoto()
+    }
+
+    // Will try for another process. It is unnecessary for the click
+    private fun shuffleProcess(): Flow<HomeActionLayer> = flow {
+        emit(HomeActionLayer.ShuffleClicked)
+    }
+
 
 }

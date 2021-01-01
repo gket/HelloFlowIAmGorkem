@@ -2,19 +2,19 @@ package com.gk.helloflowiamgorkem.repository
 
 import com.gk.helloflowiamgorkem.api.UnsplashApiService
 import com.gk.helloflowiamgorkem.data.UnsplashPhoto
-import com.gk.helloflowiamgorkem.utils.Resource
+import com.gk.helloflowiamgorkem.ui.home.HomeUiDisplayer
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class PhotoRepository(private val unsplashApiService: UnsplashApiService) {
-    fun getRandomPhoto(): Flow<Resource<List<UnsplashPhoto>>> =
+    fun getRandomPhoto(): Flow<HomeUiDisplayer<List<UnsplashPhoto>>> =
         flow {
-            emit(Resource.Loading())
+            emit(HomeUiDisplayer.Loading())
             val response = unsplashApiService.getRandomPhotos(5)
             if (response.isSuccessful) {
-                emit(Resource.Success(response.body()))
+                emit(HomeUiDisplayer.Success(response.body()))
             } else {
-                emit(Resource.Error(response.message()))
+                emit(HomeUiDisplayer.Error(response.message()))
             }
         }
 }
