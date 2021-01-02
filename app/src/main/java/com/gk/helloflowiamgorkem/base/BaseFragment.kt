@@ -29,6 +29,8 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 
     abstract fun onInitListener()
 
+    open fun clickHandling() {}
+
     open fun onPreInit(savedInstanceState: Bundle?) {}
 
     final override fun onCreateView(
@@ -47,6 +49,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
         onObserveData()
         onInitView()
         onInitListener()
+        clickHandling()
     }
 
 
@@ -62,5 +65,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
     fun showLoading() {
         (activity as BaseActivity<*>).showLoading()
     }
+
+
 
 }
