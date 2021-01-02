@@ -83,8 +83,8 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
                 }
                 is HomeViewModel.ViewState.UnSplashPhotos -> {
                     hideLoading()
+                    setImageBlur(state.list.first().url.thumb) // For first item
                     adapterPhoto?.items = state.list
-                    setImageBlur(adapterPhoto?.items.orEmpty().first().url.thumb) // For first item
                     Log.d("ViewState", "UnSplashPhotos")
                 }
                 is HomeViewModel.ViewState.Error -> {
