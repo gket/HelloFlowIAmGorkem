@@ -1,88 +1,106 @@
 package com.gk.helloflowiamgorkem.ui.home
 
-import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.gk.helloflowiamgorkem.adapter.PhotoCardAdapter
+import com.gk.helloflowiamgorkem.base.BaseViewModelFragment
 import com.gk.helloflowiamgorkem.data.UnsplashPhoto
 import com.gk.helloflowiamgorkem.databinding.FragmentHomeBinding
 import com.gk.helloflowiamgorkem.di.GlideApp
 import com.gk.helloflowiamgorkem.utils.WiwwCompositePageTransformer
+import com.gk.helloflowiamgorkem.utils.listen
+import com.gk.helloflowiamgorkem.utils.longToast
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.blurry.Blurry
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>() {
 
     //TARGET : REDUCE THIS FRAGMENT
-    //TODO : 3 - CLEAN
-    private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding!!
-    private val homeViewModel by viewModels<HomeViewModel>()
     private var firstPosition = 0
     private var controlPosition = 0
     private var dummyIsClicked = false
+    private var adapterPhoto: PhotoCardAdapter? = null
 
-    override fun onCreateView(
+    override val viewModel: HomeViewModel by viewModels()
+
+    override fun getViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        return binding.root
+        attachToParent: Boolean
+    ): FragmentHomeBinding {
+        return FragmentHomeBinding.inflate(inflater, container, attachToParent)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.imageView.setOnClickListener { homeViewModel.shuffle() }
-        lifecycleScope.launchWhenCreated {
-            homeViewModel.uiState.collect {
-                when (it) {
-                    is HomeUiDisplayer.Success -> {
-                        it.data?.let { photos -> updateImages(photos) }
-                    }
-                    is HomeUiDisplayer.Error -> {
-                        Log.d("ResourceState:", "Error:" + it.message.toString())
-                    }
-                    is HomeUiDisplayer.Loading -> {
-                        Log.d("ResourceState:", "Loading:")
-                    }
-                    is HomeUiDisplayer.ShuffleClicking -> {
-                        binding.imageView.setBackgroundColor(
-                            HomeUiState.getShuffleColor(
-                                binding.root.context,
-                                dummyIsClicked
-                            )
-                        )
-                        dummyIsClicked = !dummyIsClicked
-                    }
-                    else -> Log.d("ResourceState:", "Unexpected")
+    override fun onInitView() {
+        viewModel.getRandomPhoto()
+        adapterPhoto = PhotoCardAdapter()
+        setViewPager()
+    }
+
+    private fun setViewPager() = with(binding.viewPager) {
+        offscreenPageLimit = 5
+        getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+        setPageTransformer(WiwwCompositePageTransformer.getCompositePageTransformer())
+        adapter = adapterPhoto
+        registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+                if (position != controlPosition) {
+                    controlPosition = position
+                    setImageBlur(adapterPhoto?.items.orEmpty()[controlPosition].url.thumb)
+                }
+            }
+        })
+    }
+
+    override fun onInitListener() {
+
+    }
+
+    override fun onObserveData() {
+        super.onObserveData()
+        // todo: collect ile uğraşmaman için extension method yazdım
+        //  hade gene iyisin :)
+        viewModel.viewState.listen { state ->
+            when (state) {
+                is HomeViewModel.ViewState.Loading -> {
+                    showLoading()
+                    Log.d("ViewState", "Loading")
+                }
+                is HomeViewModel.ViewState.UnSplashPhotos -> {
+                    hideLoading()
+                    adapterPhoto?.items = state.list
+                    setImageBlur(adapterPhoto?.items.orEmpty().first().url.thumb) // For first item
+                    Log.d("ViewState", "UnSplashPhotos")
+                }
+                is HomeViewModel.ViewState.Error -> {
+                    hideLoading()
+                    longToast(message = state.error.toString())
+                    Log.d("ViewState", "Error")
                 }
             }
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 
     fun updateImages(photos: List<UnsplashPhoto>) {
         //TODO : 1 - Will change this part
         val viewPager = binding.viewPager
-        viewPager.adapter = context?.let { PhotoCardAdapter(photos, it) }
+        viewPager.adapter = adapterPhoto
         viewPager.offscreenPageLimit = 5
         viewPager.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
         viewPager.setPageTransformer(WiwwCompositePageTransformer.getCompositePageTransformer())
@@ -119,6 +137,11 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        adapterPhoto = null
+        super.onDestroyView()
     }
 
 
