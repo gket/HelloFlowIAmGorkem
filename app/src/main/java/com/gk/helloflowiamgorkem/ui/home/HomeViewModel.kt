@@ -3,45 +3,59 @@ package com.gk.helloflowiamgorkem.ui.home
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gk.helloflowiamgorkem.data.UnsplashPhoto
+import com.gk.helloflowiamgorkem.base.BaseViewModel
 import com.gk.helloflowiamgorkem.repository.PhotoRepository
-import kotlinx.coroutines.flow.*
+import com.gk.helloflowiamgorkem.utils.NetworkState
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class HomeViewModel @ViewModelInject constructor(
     @Assisted private val savedStateHandle: SavedStateHandle,
     private val repository: PhotoRepository
-) : ViewModel() {
+) : BaseViewModel() {
 
-    private val _uiState = MutableStateFlow<HomeUiDisplayer<List<UnsplashPhoto>>>(HomeUiDisplayer.Loading())
-    val uiState: StateFlow<HomeUiDisplayer<List<UnsplashPhoto>>> = _uiState
-    private val _action =
-        MutableStateFlow<HomeActionLayer>(HomeActionLayer.ShuffleClicked)
-    private val actionState: StateFlow<HomeActionLayer> = _action
+    private val _viewState = MutableStateFlow<HomeViewState>(HomeViewState.Loading)
+    val viewState: StateFlow<HomeViewState> = _viewState
 
-    init {
-        getRandomPhoto()
-    }
+    var isPending: Boolean = false
 
-    private fun getRandomPhoto() {
+    fun getRandomPhoto() {
         viewModelScope.launch {
             repository.getRandomPhoto().collect {
-                _uiState.value = it
+                when (it) {
+                    is NetworkState.Success -> {
+                        _viewState.value = HomeViewState.UnSplashPhotos(it.response)
+                    }
+                    is NetworkState.Error -> {
+                        _viewState.value = HomeViewState.Error(it.message)
+                    }
+                    is NetworkState.Loading -> {
+                        _viewState.value = HomeViewState.Loading
+                    }
+                }
             }
         }
     }
 
     fun shuffle() {
-        _uiState.value = HomeUiDisplayer.ShuffleClicking()
-        getRandomPhoto()
+        viewModelScope.launch {
+            if (isPending) {
+                _viewState.value = HomeViewState.ShowToast("Please Wait for new Shuffle")
+                delay(2000)
+                _viewState.value = HomeViewState.ClearToast
+            } else {
+                _viewState.value = HomeViewState.ShuttleState(false)
+                getRandomPhoto()
+                delay(30000)
+                _viewState.value = HomeViewState.ShuttleState(true)
+            }
+        }
     }
 
-    // Will try for another process. It is unnecessary for the click
-    private fun shuffleProcess(): Flow<HomeActionLayer> = flow {
-        emit(HomeActionLayer.ShuffleClicked)
-    }
 
 
 }
