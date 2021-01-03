@@ -6,7 +6,7 @@ import com.gk.helloflowiamgorkem.utils.NetworkState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class PhotoRepository(private val unSplashApiService: UnsplashApiService) : BaseRepository() {
+class RandomPhotoRepository(private val unSplashApiService: UnsplashApiService) : BaseRepository() {
 
     fun getRandomPhoto(): Flow<NetworkState<List<UnsplashPhoto>>> = flow {
         emit(apiCallResponse { unSplashApiService.getRandomPhotos(5) })

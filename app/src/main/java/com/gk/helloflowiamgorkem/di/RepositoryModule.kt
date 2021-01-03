@@ -1,7 +1,8 @@
 package com.gk.helloflowiamgorkem.di
 
 import com.gk.helloflowiamgorkem.api.UnsplashApiService
-import com.gk.helloflowiamgorkem.repository.PhotoRepository
+import com.gk.helloflowiamgorkem.repository.PhotoLibraryRepository
+import com.gk.helloflowiamgorkem.repository.RandomPhotoRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,7 +12,12 @@ import dagger.hilt.android.components.ApplicationComponent
 @InstallIn(ApplicationComponent::class)
 object RepositoryModule {
     @Provides
-    fun provideRepository(unsplashApiService: UnsplashApiService): PhotoRepository {
-        return PhotoRepository(unsplashApiService)
+    fun provideRandomRepo(unsplashApiService: UnsplashApiService): RandomPhotoRepository {
+        return RandomPhotoRepository(unsplashApiService)
+    }
+
+    @Provides
+    fun providePhotosRepo(unsplashApiService: UnsplashApiService): PhotoLibraryRepository {
+        return PhotoLibraryRepository(unsplashApiService)
     }
 }
