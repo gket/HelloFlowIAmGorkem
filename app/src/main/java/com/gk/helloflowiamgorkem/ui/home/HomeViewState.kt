@@ -6,7 +6,7 @@ sealed class HomeViewState {
     object Loading : HomeViewState()
     data class UnSplashPhotos(val list: List<UnsplashPhoto>) : HomeViewState()
     data class Error(val error: String?) : HomeViewState()
-    data class ShuttleState(val isEnable: Boolean) : HomeViewState()
+    data class ShuffleState(val isEnable: Boolean) : HomeViewState()
     data class ShowToast(val message: String) : HomeViewState()
     object ClearToast : HomeViewState()
 }

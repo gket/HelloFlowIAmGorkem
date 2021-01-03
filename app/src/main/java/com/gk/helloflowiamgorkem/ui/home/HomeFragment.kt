@@ -1,4 +1,4 @@
-package com.gk.helloflowiamgorkem.ui.home
+ package com.gk.helloflowiamgorkem.ui.home
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -29,7 +29,6 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
 
     private var controlPosition = 0
     private var adapterPhoto: PhotoCardAdapter? = null
-    private var isActive: Boolean = false
 
     override val viewModel: HomeViewModel by viewModels()
 
@@ -93,7 +92,7 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
                     longToast(message = state.error.toString())
                     Log.d("ViewState", "Error")
                 }
-                is HomeViewState.ShuttleState -> {
+                is HomeViewState.ShuffleState -> {
                     hideLoading()
                     viewModel.isPending = !state.isEnable
                     if (state.isEnable) {

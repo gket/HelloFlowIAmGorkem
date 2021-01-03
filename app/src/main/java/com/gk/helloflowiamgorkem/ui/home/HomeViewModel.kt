@@ -5,7 +5,7 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.gk.helloflowiamgorkem.base.BaseViewModel
-import com.gk.helloflowiamgorkem.repository.PhotoRepository
+import com.gk.helloflowiamgorkem.repository.RandomPhotoRepository
 import com.gk.helloflowiamgorkem.utils.NetworkState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel @ViewModelInject constructor(
     @Assisted private val savedStateHandle: SavedStateHandle,
-    private val repository: PhotoRepository
+    private val repositoryRandom: RandomPhotoRepository
 ) : BaseViewModel() {
 
     private val _viewState = MutableStateFlow<HomeViewState>(HomeViewState.Loading)
@@ -25,7 +25,7 @@ class HomeViewModel @ViewModelInject constructor(
 
     fun getRandomPhoto() {
         viewModelScope.launch {
-            repository.getRandomPhoto().collect {
+            repositoryRandom.getRandomPhoto().collect {
                 when (it) {
                     is NetworkState.Success -> {
                         _viewState.value = HomeViewState.UnSplashPhotos(it.response)
@@ -48,10 +48,10 @@ class HomeViewModel @ViewModelInject constructor(
                 delay(2000)
                 _viewState.value = HomeViewState.ClearToast
             } else {
-                _viewState.value = HomeViewState.ShuttleState(false)
+                _viewState.value = HomeViewState.ShuffleState(false)
                 getRandomPhoto()
                 delay(30000)
-                _viewState.value = HomeViewState.ShuttleState(true)
+                _viewState.value = HomeViewState.ShuffleState(true)
             }
         }
     }
