@@ -1,6 +1,5 @@
 package com.gk.helloflowiamgorkem.source
 
-import android.util.Log
 import androidx.paging.PagingSource
 import com.gk.helloflowiamgorkem.api.UnsplashApiService
 import com.gk.helloflowiamgorkem.data.UnsplashPhoto
@@ -12,7 +11,7 @@ private const val UNSPLASH_PHOTOS_STARTING_PAGE_INDEX = 1
 class UnsplashPagingSource(
     private val service: UnsplashApiService
 ) : PagingSource<Int, UnsplashPhoto>() {
-    
+
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, UnsplashPhoto> {
         val position = params.key ?: UNSPLASH_PHOTOS_STARTING_PAGE_INDEX
 

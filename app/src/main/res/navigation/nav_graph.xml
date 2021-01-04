@@ -9,21 +9,35 @@
         android:id="@+id/home"
         android:name="com.gk.helloflowiamgorkem.ui.home.HomeFragment"
         android:label="@string/text_home"
-        tools:layout="@layout/fragment_home">
-    </fragment>
+        tools:layout="@layout/fragment_home"></fragment>
 
     <fragment
         android:id="@+id/photos"
         android:name="com.gk.helloflowiamgorkem.ui.photo_library.PhotoLibraryFragment"
         android:label="@string/text_photos"
         tools:layout="@layout/fragment_photos">
+        <action
+            android:id="@+id/action_photos_to_photoDetailFragment"
+            app:destination="@id/photoDetailFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/favorites"
         android:name="com.gk.helloflowiamgorkem.ui.favorite.FavoriteFragment"
         android:label="@string/text_favorites"
-        tools:layout="@layout/fragment_favorite">
+        tools:layout="@layout/fragment_favorite" />
+    <fragment
+        android:id="@+id/photoDetailFragment"
+        android:name="com.gk.helloflowiamgorkem.ui.photo_detail.PhotoDetailFragment"
+        android:label="PhotoDetailFragment">
+        <argument
+            android:name="photoUrl"
+            app:argType="string"
+            app:nullable="true"/>
+        <argument
+            android:name="userName"
+            app:argType="string"
+            app:nullable="true"/>
     </fragment>
 
 </navigation>

@@ -31,7 +31,7 @@ class PhotoCardAdapter : RecyclerView.Adapter<PhotoCardAdapter.ViewHolder>() {
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: UnsplashPhoto) {
-            GlideApp.with(binding.root.context).load(item.url.regular)
+            GlideApp.with(binding.root.context).load(item.urls.regular)
                 .into(binding.imageViewPhoto)
         }
 

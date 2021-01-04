@@ -60,7 +60,7 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels)
                 if (position != controlPosition) {
                     controlPosition = position
-                    setImageBlur(adapterPhoto?.items.orEmpty()[controlPosition].url.thumb)
+                    setImageBlur(adapterPhoto?.items.orEmpty()[controlPosition].urls.thumb)
                 }
             }
         })
@@ -83,7 +83,7 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
                 }
                 is HomeViewState.UnSplashPhotos -> {
                     hideLoading()
-                    setImageBlur(state.list.first().url.thumb) // For first item
+                    setImageBlur(state.list.first().urls.thumb) // For first item
                     adapterPhoto?.items = state.list
                     Log.d("ViewState", "UnSplashPhotos")
                 }

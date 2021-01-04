@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.gk.helloflowiamgorkem.adapter.PhotoLibraryPagingAdapter
 import com.gk.helloflowiamgorkem.base.BaseViewModelFragment
 import com.gk.helloflowiamgorkem.databinding.FragmentPhotosBinding
@@ -29,6 +30,15 @@ class PhotoLibraryFragment : BaseViewModelFragment<FragmentPhotosBinding, PhotoL
     override fun onInitView() {
         adapterPhoto = PhotoLibraryPagingAdapter()
         binding.recyclerViewPhotos.adapter = adapterPhoto
+
+        adapterPhoto?.onPhotoClicked = {
+            val action = PhotoLibraryFragmentDirections.actionPhotosToPhotoDetailFragment(
+                it.urls.full,
+                it.user.username
+            )
+            findNavController().navigate(action)
+        }
+
         viewModel.getPhotos()
         lifecycleScope.launch {
             viewModel.viewState.collect {
