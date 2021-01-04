@@ -12,6 +12,8 @@ import com.gk.helloflowiamgorkem.di.GlideApp
 class PhotoLibraryPagingAdapter :
     PagingDataAdapter<UnsplashPhoto, PhotoLibraryPagingAdapter.ViewHolder>(PhotoComparator) {
 
+    lateinit var onPhotoClicked: ((UnsplashPhoto) -> Unit)
+
     companion object PhotoComparator : DiffUtil.ItemCallback<UnsplashPhoto>() {
         override fun areItemsTheSame(oldItem: UnsplashPhoto, newItem: UnsplashPhoto) =
             oldItem.id == newItem.id
@@ -34,8 +36,12 @@ class PhotoLibraryPagingAdapter :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: UnsplashPhoto) {
-            GlideApp.with(binding.root.context).load(item.url.regular)
+            GlideApp.with(binding.root.context).load(item.urls.regular)
                 .into(binding.imageViewLibraryPhoto)
+
+            binding.cardView.setOnClickListener {
+                onPhotoClicked.invoke(item)
+            }
         }
 
     }
