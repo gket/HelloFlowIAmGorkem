@@ -41,6 +41,8 @@ App will include 3 main features.
 
 ![wiwwphotos](https://user-images.githubusercontent.com/12651294/103485254-1a1fe400-4e06-11eb-81fa-d2df039643c3.jpeg)
 
+## PhotoDetail : Includes photo detail about username and large photo size. NavArgs.
+
 ______________________________
 
 APP TODO :
@@ -49,7 +51,5 @@ Photos
 -Search with filter [IN PROGRESS]
 -List Sorting [TODO]
 
-Photo_Detail [TODO]l
--arguments 
 
 Favorites : It will include favorite photos. [TODO]
