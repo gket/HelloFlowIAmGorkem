@@ -36,6 +36,7 @@ class PhotoLibraryFragment : BaseViewModelFragment<FragmentPhotosBinding, PhotoL
                 it.urls.full,
                 it.user.username
             )
+
             findNavController().navigate(action)
         }
 
