@@ -16,9 +16,12 @@
         android:name="com.gk.helloflowiamgorkem.ui.photo_library.PhotoLibraryFragment"
         android:label="@string/text_photos"
         tools:layout="@layout/fragment_photos">
+
         <action
             android:id="@+id/action_photos_to_photoDetailFragment"
-            app:destination="@id/photoDetailFragment" />
+            app:destination="@id/photoDetailFragment"
+            app:popUpTo="@id/photos"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -33,11 +36,16 @@
         <argument
             android:name="photoUrl"
             app:argType="string"
-            app:nullable="true"/>
+            app:nullable="true" />
         <argument
             android:name="userName"
             app:argType="string"
-            app:nullable="true"/>
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_photoDetailFragment_to_photos"
+            app:destination="@id/photos"
+            app:popUpTo="@id/photoDetailFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
 
 </navigation>
