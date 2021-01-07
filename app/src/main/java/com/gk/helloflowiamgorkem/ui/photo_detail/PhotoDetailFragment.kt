@@ -38,6 +38,9 @@ class PhotoDetailFragment :
             val action = PhotoDetailFragmentDirections.actionPhotoDetailFragmentToPhotos()
             findNavController().navigate(action)
         }
+        binding.imageViewFav.setOnClickListener {
+            //TODO viewModel.addFavorite()
+        }
     }
 
     private fun setUi() {
