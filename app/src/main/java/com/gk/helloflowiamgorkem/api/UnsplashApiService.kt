@@ -14,4 +14,11 @@ interface UnsplashApiService {
         @Query("page") page: Int,
         @Query("per_page") perPage: Int
     ): Response<List<UnsplashPhoto>>
+
+    @GET("/search/photos")
+    suspend fun searchPhotos(
+        @Query("query") query: String,
+        @Query("page") page: Int,
+        @Query("per_page") perPage: Int
+    ): Response<List<UnsplashPhoto>>
 }

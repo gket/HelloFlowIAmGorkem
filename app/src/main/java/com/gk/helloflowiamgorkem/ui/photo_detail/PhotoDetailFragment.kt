@@ -39,7 +39,7 @@ class PhotoDetailFragment :
             findNavController().navigate(action)
         }
         binding.imageViewFav.setOnClickListener {
-            //TODO viewModel.addFavorite()
+            viewModel.manageFavorite(url.toString())
         }
     }
 

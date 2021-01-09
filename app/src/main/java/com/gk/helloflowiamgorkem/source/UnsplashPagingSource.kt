@@ -4,20 +4,34 @@ import androidx.paging.PagingSource
 import com.gk.helloflowiamgorkem.api.UnsplashApiService
 import com.gk.helloflowiamgorkem.data.UnsplashPhoto
 import retrofit2.HttpException
+import retrofit2.Response
 import java.io.IOException
 
 private const val UNSPLASH_PHOTOS_STARTING_PAGE_INDEX = 1
 
 class UnsplashPagingSource(
-    private val service: UnsplashApiService
+    private val service: UnsplashApiService,
+    private val isSearchProcess: Boolean,
+    private val query : String?
 ) : PagingSource<Int, UnsplashPhoto>() {
+
+    lateinit var response : Response<List<UnsplashPhoto>>
+    lateinit var data : List<UnsplashPhoto>
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, UnsplashPhoto> {
         val position = params.key ?: UNSPLASH_PHOTOS_STARTING_PAGE_INDEX
 
         return try {
-            val response = service.getPhotos(position, params.loadSize)
-            val data = response.body() ?: emptyList()
+            if(isSearchProcess){
+                response = service.searchPhotos(query ?: "", position, params.loadSize)
+                data = response.body() ?: emptyList()
+            }
+
+            else{
+                response = service.getPhotos(position, params.loadSize)
+                data = response.body() ?: emptyList()
+            }
+
             LoadResult.Page(
                 data = data,
                 prevKey = if (position == UNSPLASH_PHOTOS_STARTING_PAGE_INDEX) null else position - 1,

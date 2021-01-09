@@ -5,6 +5,6 @@ import com.gk.helloflowiamgorkem.database.dao.UnsplashDao
 
 class PhotoDetailRepository(private val unsplashDao: UnsplashDao) : BaseRepository() {
     suspend fun addPhotoToFavorite(unsplashPhoto: UnsplashPhoto) {
-        unsplashDao.addPhoto(unsplashPhoto)
+       // unsplashDao.addPhoto(unsplashPhoto)
     }
 }

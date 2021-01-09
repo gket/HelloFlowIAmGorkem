@@ -25,6 +25,20 @@
     </fragment>
 
     <fragment
+        android:id="@+id/search"
+        android:name="com.gk.helloflowiamgorkem.ui.search.SearchFragment"
+        android:label="@string/text_photos"
+        tools:layout="@layout/fragment_search">
+
+        <action
+            android:id="@+id/action_search_to_photoDetailFragment"
+            app:destination="@id/photoDetailFragment"
+            app:popUpTo="@id/photos"
+            app:popUpToInclusive="true" />
+
+    </fragment>
+
+    <fragment
         android:id="@+id/favorites"
         android:name="com.gk.helloflowiamgorkem.ui.favorite.FavoriteFragment"
         android:label="@string/text_favorites"
@@ -45,7 +59,7 @@
             android:id="@+id/action_photoDetailFragment_to_photos"
             app:destination="@id/photos"
             app:popUpTo="@id/photoDetailFragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
     </fragment>
 
 </navigation>
