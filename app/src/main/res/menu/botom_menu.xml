@@ -8,6 +8,14 @@
         android:id="@+id/photos"
         android:title="@string/text_photos"
         android:icon="@drawable/ic_photo_library"/>
+
+    <item
+        android:id="@id/search"
+        android:title="Search"
+        android:icon="@drawable/ic_search">
+
+    </item>
+
     <item
         android:id="@+id/favorites"
         android:title="@string/text_favorites"

@@ -41,6 +41,7 @@ class PhotoLibraryFragment : BaseViewModelFragment<FragmentPhotosBinding, PhotoL
         }
 
         viewModel.getPhotos()
+
         lifecycleScope.launch {
             viewModel.viewState.collect {
                 adapterPhoto?.submitData(lifecycle, it)

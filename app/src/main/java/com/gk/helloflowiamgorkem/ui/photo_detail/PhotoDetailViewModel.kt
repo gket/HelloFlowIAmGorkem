@@ -9,8 +9,8 @@ class PhotoDetailViewModel @ViewModelInject constructor(
     @Assisted private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel() {
 
-    fun addFavorite(id : String){
-        //TODO Find with id and addFav
+    fun manageFavorite(url : String){
+        
     }
 
 }

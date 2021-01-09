@@ -4,6 +4,7 @@ import com.gk.helloflowiamgorkem.api.UnsplashApiService
 import com.gk.helloflowiamgorkem.database.dao.UnsplashDao
 import com.gk.helloflowiamgorkem.repository.PhotoDetailRepository
 import com.gk.helloflowiamgorkem.repository.PhotoLibraryRepository
+import com.gk.helloflowiamgorkem.repository.PhotoSearchRepository
 import com.gk.helloflowiamgorkem.repository.RandomPhotoRepository
 import dagger.Module
 import dagger.Provides
@@ -24,7 +25,12 @@ object RepositoryModule {
     }
 
     @Provides
-    fun providePhotoDetailRep(unsplashDao: UnsplashDao): PhotoDetailRepository {
-        return PhotoDetailRepository((unsplashDao))
+    fun providePhotoDetailRepo(unsplashDao: UnsplashDao): PhotoDetailRepository {
+        return PhotoDetailRepository(unsplashDao)
+    }
+
+    @Provides
+    fun providePhotoSearchRepo(unsplashApiService: UnsplashApiService): PhotoSearchRepository {
+        return PhotoSearchRepository(unsplashApiService)
     }
 }
