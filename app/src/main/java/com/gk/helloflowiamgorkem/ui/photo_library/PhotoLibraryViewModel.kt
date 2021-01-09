@@ -22,9 +22,9 @@ class PhotoLibraryViewModel @ViewModelInject constructor(
     private val _viewState = MutableStateFlow<PagingData<UnsplashPhoto>>(PagingData.empty())
     val viewState: StateFlow<PagingData<UnsplashPhoto>> = _viewState
 
-    fun getPhotos(isSearch : Boolean)  {
+    fun getPhotos()  {
         viewModelScope.launch {
-            repositoryPhotos.getPhotos(isSearch).collect {
+            repositoryPhotos.getPhotos(false, "").collect {
                 Log.d("GETPHOTOS:::", "I am collected")
                 _viewState.value = it
             }

@@ -40,7 +40,7 @@ class PhotoLibraryFragment : BaseViewModelFragment<FragmentPhotosBinding, PhotoL
             findNavController().navigate(action)
         }
 
-        viewModel.getPhotos(false)
+        viewModel.getPhotos()
 
         lifecycleScope.launch {
             viewModel.viewState.collect {

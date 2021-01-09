@@ -1,5 +1,6 @@
 package com.gk.helloflowiamgorkem.source
 
+import android.util.Log
 import androidx.paging.PagingSource
 import com.gk.helloflowiamgorkem.api.UnsplashApiService
 import com.gk.helloflowiamgorkem.data.UnsplashPhoto
@@ -24,6 +25,7 @@ class UnsplashPagingSource(
         return try {
             if(isSearchProcess){
                 response = service.searchPhotos(query ?: "", position, params.loadSize)
+                Log.d("RESPONSEEE:::", response.message())
                 data = response.body() ?: emptyList()
             }
 

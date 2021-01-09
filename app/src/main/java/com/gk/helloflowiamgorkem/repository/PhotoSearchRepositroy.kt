@@ -8,10 +8,8 @@ import com.gk.helloflowiamgorkem.data.UnsplashPhoto
 import com.gk.helloflowiamgorkem.source.UnsplashPagingSource
 import kotlinx.coroutines.flow.Flow
 
-class PhotoLibraryRepository(private val unsplashApiService: UnsplashApiService) :
-    BaseRepository() {
-
-    fun getPhotos(isSearch: Boolean, query: String?): Flow<PagingData<UnsplashPhoto>> {
+class PhotoSearchRepository(private val unsplashApiService: UnsplashApiService) : BaseRepository() {
+    fun getSearchResult(isSearch: Boolean, query: String?): Flow<PagingData<UnsplashPhoto>> {
         return (Pager(
             config = PagingConfig(
                 pageSize = 30,
@@ -19,5 +17,4 @@ class PhotoLibraryRepository(private val unsplashApiService: UnsplashApiService)
             ), pagingSourceFactory = { UnsplashPagingSource(unsplashApiService, isSearch, query) }
         ).flow)
     }
-
 }
