@@ -2,6 +2,7 @@ package com.gk.helloflowiamgorkem.source
 
 import androidx.paging.PagingSource
 import com.gk.helloflowiamgorkem.api.UnsplashApiService
+import com.gk.helloflowiamgorkem.data.SearchResponse
 import com.gk.helloflowiamgorkem.data.UnsplashPhoto
 import retrofit2.HttpException
 import retrofit2.Response
@@ -18,13 +19,15 @@ class UnsplashPagingSource(
     lateinit var response : Response<List<UnsplashPhoto>>
     lateinit var data : List<UnsplashPhoto>
 
+    lateinit var responseSearch : Response<SearchResponse>
+
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, UnsplashPhoto> {
         val position = params.key ?: UNSPLASH_PHOTOS_STARTING_PAGE_INDEX
 
         return try {
             if(isSearchProcess){
-                response = service.searchPhotos(query ?: "", position, params.loadSize)
-                data = response.body() ?: emptyList()
+                responseSearch = service.searchPhotos(query ?: "", position, params.loadSize)
+                data = responseSearch.body()?.results ?: emptyList()
             }
 
             else{
