@@ -1,31 +1,22 @@
 package com.gk.helloflowiamgorkem.ui.photo_library
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.gk.helloflowiamgorkem.R
 import com.gk.helloflowiamgorkem.adapter.PhotoLibraryPagingAdapter
-import com.gk.helloflowiamgorkem.base.BaseViewModelFragment
+import com.gk.helloflowiamgorkem.base.BaseFragment
 import com.gk.helloflowiamgorkem.databinding.FragmentPhotosBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class PhotoLibraryFragment : BaseViewModelFragment<FragmentPhotosBinding, PhotoLibraryViewModel>() {
+class PhotoLibraryFragment : BaseFragment<FragmentPhotosBinding, PhotoLibraryViewModel>(R.layout.fragment_photos) {
 
     private var adapterPhoto: PhotoLibraryPagingAdapter? = null
 
     override val viewModel: PhotoLibraryViewModel by viewModels()
-
-    override fun getViewBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        attachToParent: Boolean
-    ): FragmentPhotosBinding {
-        return FragmentPhotosBinding.inflate(inflater, container, attachToParent)
-    }
 
     override fun onInitView() {
         adapterPhoto = PhotoLibraryPagingAdapter()
