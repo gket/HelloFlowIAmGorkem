@@ -13,8 +13,6 @@ This project includes :
 
 -Navigation
 
--ViewBinding
-
 -ViewPager
 
 -UiStates(UiDisplaye)
