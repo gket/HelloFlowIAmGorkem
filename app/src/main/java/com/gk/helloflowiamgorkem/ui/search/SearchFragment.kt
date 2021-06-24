@@ -1,29 +1,21 @@
 package com.gk.helloflowiamgorkem.ui.search
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.gk.helloflowiamgorkem.R
 import com.gk.helloflowiamgorkem.adapter.PhotoLibraryPagingAdapter
-import com.gk.helloflowiamgorkem.base.BaseViewModelFragment
+import com.gk.helloflowiamgorkem.base.BaseFragment
 import com.gk.helloflowiamgorkem.databinding.FragmentSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SearchFragment : BaseViewModelFragment<FragmentSearchBinding, SearchViewModel>() {
+class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(R.layout.fragment_search) {
+
     override val viewModel: SearchViewModel by viewModels()
     private lateinit var adapterPhoto: PhotoLibraryPagingAdapter
-
-    override fun getViewBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        attachToParent: Boolean
-    ): FragmentSearchBinding {
-        return FragmentSearchBinding.inflate(inflater, container, attachToParent)
-    }
 
     override fun onInitView() {
         adapterPhoto = PhotoLibraryPagingAdapter()
