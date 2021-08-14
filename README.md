@@ -19,12 +19,13 @@ This project includes :
 
 -Action Structure
 
-______________________________
-
-LIBS TODO : 
+-Paging3
 
 -Room
 
+______________________________
+
+TO DO : TESTING
 ______________________________
 
 # About App
@@ -46,7 +47,6 @@ ______________________________
 APP TODO :
 
 Photos  
--Search with filter [IN PROGRESS]
 -List Sorting [TODO]
 
 
