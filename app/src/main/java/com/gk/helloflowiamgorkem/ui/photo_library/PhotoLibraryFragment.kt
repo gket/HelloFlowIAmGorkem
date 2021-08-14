@@ -33,8 +33,9 @@ class PhotoLibraryFragment : BaseViewModelFragment<FragmentPhotosBinding, PhotoL
 
         adapterPhoto?.onPhotoClicked = {
             val action = PhotoLibraryFragmentDirections.actionPhotosToPhotoDetailFragment(
-                it.urls.full,
-                it.user.username
+                it.urls.regular,
+                it.user.username,
+                it.id
             )
 
             findNavController().navigate(action)

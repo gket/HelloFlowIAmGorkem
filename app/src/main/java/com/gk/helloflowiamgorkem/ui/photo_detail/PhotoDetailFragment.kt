@@ -2,14 +2,17 @@ package com.gk.helloflowiamgorkem.ui.photo_detail
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.activity.addCallback
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import com.gk.helloflowiamgorkem.R
 import com.gk.helloflowiamgorkem.base.BaseViewModelFragment
+import com.gk.helloflowiamgorkem.data.Favorite
 import com.gk.helloflowiamgorkem.databinding.FragmentPhotoDetailBinding
 import com.gk.helloflowiamgorkem.di.GlideApp
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class PhotoDetailFragment :
@@ -18,6 +21,7 @@ class PhotoDetailFragment :
     private val args by navArgs<PhotoDetailFragmentArgs>()
     private var userName: String? = null
     private var url: String? = null
+    lateinit var id: String
 
     override fun getViewBinding(
         inflater: LayoutInflater,
@@ -30,16 +34,39 @@ class PhotoDetailFragment :
     override fun onInitView() {
         userName = args.userName
         url = args.photoUrl
+        id = args.id
         setUi()
     }
 
     override fun onInitListener() {
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            val action = PhotoDetailFragmentDirections.actionPhotoDetailFragmentToPhotos()
-            findNavController().navigate(action)
-        }
+        viewModel.checkIsFavorited(id)
+
         binding.imageViewFav.setOnClickListener {
-            viewModel.manageFavorite(url.toString())
+            viewModel.addFavorite(Favorite(id, url, userName))
+        }
+        lifecycleScope.launchWhenCreated {
+            viewModel.viewState.collect {
+                when (it) {
+                    is PhotoDetailViewState.Error -> ""
+                    is PhotoDetailViewState.IsFavorited -> {
+                        if (it.isFavorited) {
+                            binding.imageViewFav.setImageDrawable(
+                                ContextCompat.getDrawable(
+                                    requireContext(),
+                                    R.drawable.ic_favorite
+                                )
+                            )
+                        } else {
+                            binding.imageViewFav.setImageDrawable(
+                                ContextCompat.getDrawable(
+                                    requireContext(),
+                                    R.drawable.ic_favorite_border
+                                )
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 

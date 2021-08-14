@@ -36,7 +36,7 @@ class PhotoLibraryPagingAdapter :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: UnsplashPhoto) {
-            GlideApp.with(binding.root.context).load(item.urls.regular)
+            GlideApp.with(binding.root.context).load(item.urls.small)
                 .into(binding.imageViewLibraryPhoto)
 
             binding.cardView.setOnClickListener {

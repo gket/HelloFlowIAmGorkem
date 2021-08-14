@@ -85,6 +85,7 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
                     hideLoading()
                     setImageBlur(state.list.first().urls.thumb) // For first item
                     adapterPhoto?.items = state.list
+                    binding.viewPager.setCurrentItem(0, true)
                     Log.d("ViewState", "UnSplashPhotos")
                 }
                 is HomeViewState.Error -> {
@@ -119,7 +120,7 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
         }
     }
 
-    fun setImageBlur(thumb: String) {
+    private fun setImageBlur(thumb: String) {
         lifecycleScope.launch(Dispatchers.IO) {
             context?.let {
                 val bitmap = GlideApp.with(it)

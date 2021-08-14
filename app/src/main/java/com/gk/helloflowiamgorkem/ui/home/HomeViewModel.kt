@@ -1,20 +1,19 @@
 package com.gk.helloflowiamgorkem.ui.home
 
-import androidx.hilt.Assisted
-import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.gk.helloflowiamgorkem.base.BaseViewModel
 import com.gk.helloflowiamgorkem.repository.RandomPhotoRepository
 import com.gk.helloflowiamgorkem.utils.NetworkState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel @ViewModelInject constructor(
-    @Assisted private val savedStateHandle: SavedStateHandle,
+@HiltViewModel
+class HomeViewModel @Inject constructor(
     private val repositoryRandom: RandomPhotoRepository
 ) : BaseViewModel() {
 
