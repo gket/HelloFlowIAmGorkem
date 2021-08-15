@@ -1,18 +1,17 @@
 package com.gk.helloflowiamgorkem.base
 
 import android.os.Bundle
-import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
+import androidx.viewbinding.ViewBinding
 import com.gk.helloflowiamgorkem.widgets.LoadingDialog
 
-abstract class BaseActivity<DB : ViewDataBinding>(@LayoutRes val layout: Int) :
-    AppCompatActivity() {
+abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
 
     private var loadingDialog: LoadingDialog? = null
 
-    lateinit var binding: DB
+    lateinit var binding: VB
+
+    abstract fun getViewBinding(): VB
 
     open fun onObserveData() {}
 
@@ -24,8 +23,8 @@ abstract class BaseActivity<DB : ViewDataBinding>(@LayoutRes val layout: Int) :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, layout)
-        binding.lifecycleOwner = this
+        binding = getViewBinding()
+        setContentView(binding.root)
         onPreInit(savedInstanceState)
         onObserveData()
         onInitView()
@@ -42,4 +41,6 @@ abstract class BaseActivity<DB : ViewDataBinding>(@LayoutRes val layout: Int) :
         }
         loadingDialog?.show()
     }
+
+
 }

@@ -1,6 +1,8 @@
  package com.gk.helloflowiamgorkem.ui.home
 
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -9,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.gk.helloflowiamgorkem.R
 import com.gk.helloflowiamgorkem.adapter.PhotoCardAdapter
-import com.gk.helloflowiamgorkem.base.BaseFragment
+import com.gk.helloflowiamgorkem.base.BaseViewModelFragment
 import com.gk.helloflowiamgorkem.databinding.FragmentHomeBinding
 import com.gk.helloflowiamgorkem.di.GlideApp
 import com.gk.helloflowiamgorkem.utils.WiwwCompositePageTransformer
@@ -23,12 +25,20 @@ import kotlinx.coroutines.withContext
 
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(R.layout.fragment_home) {
+class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>() {
 
     private var controlPosition = 0
     private var adapterPhoto: PhotoCardAdapter? = null
 
     override val viewModel: HomeViewModel by viewModels()
+
+    override fun getViewBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        attachToParent: Boolean
+    ): FragmentHomeBinding {
+        return FragmentHomeBinding.inflate(inflater, container, attachToParent)
+    }
 
     override fun onInitView() {
         viewModel.getRandomPhoto()
@@ -136,4 +146,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(R.layout.f
             viewModel.shuffle()
         }
     }
+
+
 }

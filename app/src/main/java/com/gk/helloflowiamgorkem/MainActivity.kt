@@ -8,9 +8,13 @@ import com.gk.helloflowiamgorkem.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
+class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     lateinit var navHostFragment: NavHostFragment
+
+    override fun getViewBinding(): ActivityMainBinding {
+        return ActivityMainBinding.inflate(layoutInflater)
+    }
 
     override fun onInitView() {
         navHostFragment = supportFragmentManager.findFragmentById(R.id.container) as NavHostFragment
