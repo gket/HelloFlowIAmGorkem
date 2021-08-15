@@ -21,7 +21,7 @@
             android:id="@+id/action_photos_to_photoDetailFragment"
             app:destination="@id/photoDetailFragment"
             app:popUpTo="@id/photos"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="false" />
     </fragment>
 
     <fragment
@@ -33,8 +33,8 @@
         <action
             android:id="@+id/action_search_to_photoDetailFragment"
             app:destination="@id/photoDetailFragment"
-            app:popUpTo="@id/photos"
-            app:popUpToInclusive="true" />
+            app:popUpTo="@id/search"
+            app:popUpToInclusive="false" />
 
     </fragment>
 
@@ -42,7 +42,14 @@
         android:id="@+id/favorites"
         android:name="com.gk.helloflowiamgorkem.ui.favorite.FavoriteFragment"
         android:label="@string/text_favorites"
-        tools:layout="@layout/fragment_favorite" />
+        tools:layout="@layout/fragment_favorite">
+        <action
+            android:id="@+id/action_favorites_to_photoDetailFragment"
+            app:destination="@id/photoDetailFragment"
+            app:popUpTo="@id/favorites"
+            app:popUpToInclusive="false" />
+    </fragment>
+
     <fragment
         android:id="@+id/photoDetailFragment"
         android:name="com.gk.helloflowiamgorkem.ui.photo_detail.PhotoDetailFragment"
@@ -55,11 +62,10 @@
             android:name="userName"
             app:argType="string"
             app:nullable="true" />
-        <action
-            android:id="@+id/action_photoDetailFragment_to_photos"
-            app:destination="@id/photos"
-            app:popUpTo="@id/photoDetailFragment"
-            app:popUpToInclusive="true" />
+        <argument
+            android:name="id"
+            app:argType="string"
+            app:nullable="false" />
     </fragment>
 
 </navigation>

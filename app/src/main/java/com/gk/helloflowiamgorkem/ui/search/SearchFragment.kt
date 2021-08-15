@@ -31,8 +31,9 @@ class SearchFragment : BaseViewModelFragment<FragmentSearchBinding, SearchViewMo
 
         adapterPhoto.onPhotoClicked = {
             val action = SearchFragmentDirections.actionSearchToPhotoDetailFragment(
-                it.urls.full,
-                it.user.username
+                it.urls.regular,
+                it.user.username,
+                it.id
             )
             findNavController().navigate(action)
         }
@@ -42,6 +43,8 @@ class SearchFragment : BaseViewModelFragment<FragmentSearchBinding, SearchViewMo
                 adapterPhoto.submitData(lifecycle, it)
             }
         }
+
+
     }
 
     override fun onInitListener() {
@@ -55,7 +58,7 @@ class SearchFragment : BaseViewModelFragment<FragmentSearchBinding, SearchViewMo
         binding.searchView.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                viewModel.getFavoritePhotos(query)
+                viewModel.getSearchedPhotos(query)
                 return false
             }
 
@@ -63,6 +66,8 @@ class SearchFragment : BaseViewModelFragment<FragmentSearchBinding, SearchViewMo
                 return false
             }
         })
+        //First search for listing items
+        binding.searchView.setQuery("flow", true)
     }
 
 
