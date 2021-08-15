@@ -1,8 +1,10 @@
 package com.gk.helloflowiamgorkem.ui.favorite
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.gk.helloflowiamgorkem.adapter.FavoritePhotoAdapter
@@ -45,7 +47,10 @@ class FavoriteFragment : BaseViewModelFragment<FragmentFavoriteBinding, Favorite
             viewModel.viewState.collect {
                 when (it) {
                     is FavoriteViewState.Error -> {
-                        // TODO Empty list ui
+                        if (lifecycle.currentState >= Lifecycle.State.STARTED) {
+                            binding.recyclerViewPhotos.visibility = View.GONE
+                            binding.textViewNoFavorite.visibility = View.VISIBLE
+                        }
                     }
                     is FavoriteViewState.FavoritePhotos -> {
                         adapterPhoto.refresh(it.list as ArrayList<Favorite>)

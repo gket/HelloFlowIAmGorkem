@@ -1,4 +1,4 @@
- package com.gk.helloflowiamgorkem.ui.home
+package com.gk.helloflowiamgorkem.ui.home
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,11 +15,10 @@ import com.gk.helloflowiamgorkem.base.BaseViewModelFragment
 import com.gk.helloflowiamgorkem.databinding.FragmentHomeBinding
 import com.gk.helloflowiamgorkem.di.GlideApp
 import com.gk.helloflowiamgorkem.utils.WiwwCompositePageTransformer
-import com.gk.helloflowiamgorkem.utils.listen
-import com.gk.helloflowiamgorkem.utils.longToast
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.blurry.Blurry
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -74,47 +73,50 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
 
     override fun onObserveData() {
         super.onObserveData()
-        viewModel.viewState.listen { state ->
-            when (state) {
-                is HomeViewState.Loading
-                -> {
-                    showLoading()
-                    Log.d("ViewState", "Loading")
-                }
-                is HomeViewState.UnSplashPhotos -> {
-                    hideLoading()
-                    setImageBlur(state.list.first().urls.thumb) // For first item
-                    adapterPhoto?.items = state.list
-                    binding.viewPager.setCurrentItem(0, true)
-                    Log.d("ViewState", "UnSplashPhotos")
-                }
-                is HomeViewState.Error -> {
-                    hideLoading()
-                    longToast(message = state.error.toString())
-                    Log.d("ViewState", "Error")
-                }
-                is HomeViewState.ShuffleState -> {
-                    hideLoading()
-                    viewModel.isPending = !state.isEnable
-                    if (state.isEnable) {
-                        binding.imageViewShuffle.setColorFilter(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                R.color.green_enable
-                            ), android.graphics.PorterDuff.Mode.SRC_IN
-                        )
-                    } else {
-                        binding.imageViewShuffle.setColorFilter(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                R.color.gray_disable
-                            ), android.graphics.PorterDuff.Mode.SRC_IN
-                        )
-
+        lifecycleScope.launchWhenCreated {
+            viewModel.viewState.collect { state ->
+                when (state) {
+                    is HomeViewState.Loading
+                    -> {
+                        showLoading()
+                        Log.d("ViewState", "Loading")
                     }
-                }
-                is HomeViewState.ShowToast -> {
-                    Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
+                    is HomeViewState.UnSplashPhotos -> {
+                        hideLoading()
+                        setImageBlur(state.list.first().urls.thumb) // For first item
+                        adapterPhoto?.items = state.list
+                        binding.viewPager.setCurrentItem(0, true)
+                        Log.d("ViewState", "UnSplashPhotos")
+                    }
+                    is HomeViewState.Error -> {
+                        hideLoading()
+                        Toast.makeText(requireContext(), state.error.toString(), Toast.LENGTH_LONG)
+                            .show()
+                        Log.d("ViewState", "Error")
+                    }
+                    is HomeViewState.ShuffleState -> {
+                        hideLoading()
+                        viewModel.isPending = !state.isEnable
+                        if (state.isEnable) {
+                            binding.imageViewShuffle.setColorFilter(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    R.color.green_enable
+                                ), android.graphics.PorterDuff.Mode.SRC_IN
+                            )
+                        } else {
+                            binding.imageViewShuffle.setColorFilter(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    R.color.gray_disable
+                                ), android.graphics.PorterDuff.Mode.SRC_IN
+                            )
+
+                        }
+                    }
+                    is HomeViewState.ShowToast -> {
+                        Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
