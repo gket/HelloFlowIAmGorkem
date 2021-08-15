@@ -1,21 +1,31 @@
 package com.gk.helloflowiamgorkem.ui.photo_detail
 
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.gk.helloflowiamgorkem.R
-import com.gk.helloflowiamgorkem.base.BaseFragment
+import com.gk.helloflowiamgorkem.base.BaseViewModelFragment
 import com.gk.helloflowiamgorkem.databinding.FragmentPhotoDetailBinding
+import com.gk.helloflowiamgorkem.di.GlideApp
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class PhotoDetailFragment :
-    BaseFragment<FragmentPhotoDetailBinding, PhotoDetailViewModel>(R.layout.fragment_photo_detail) {
+    BaseViewModelFragment<FragmentPhotoDetailBinding, PhotoDetailViewModel>() {
     override val viewModel: PhotoDetailViewModel by viewModels()
     private val args by navArgs<PhotoDetailFragmentArgs>()
     private var userName: String? = null
     private var url: String? = null
+
+    override fun getViewBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        attachToParent: Boolean
+    ): FragmentPhotoDetailBinding {
+        return FragmentPhotoDetailBinding.inflate(inflater, container, attachToParent)
+    }
 
     override fun onInitView() {
         userName = args.userName
@@ -34,9 +44,7 @@ class PhotoDetailFragment :
     }
 
     private fun setUi() {
-        binding.apply {
-            this.userName = this@PhotoDetailFragment.userName
-            this.url = this@PhotoDetailFragment.url
-        }
+        binding.textViewUserName.text = userName
+        GlideApp.with(requireContext()).load(url).into(binding.imageViewPhoto)
     }
 }

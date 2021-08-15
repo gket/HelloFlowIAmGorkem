@@ -4,18 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.viewbinding.ViewBinding
 
-abstract class BaseFragment<DB : ViewDataBinding,VM:BaseViewModel>(@LayoutRes val layout:Int) : Fragment() {
+abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 
-    val binding:DB by lazy {
-        DataBindingUtil.inflate(layoutInflater,layout,null,false)
-    }
+    private var _binding: VB? = null
 
-    abstract val viewModel: VM
+    val binding
+        get() = _binding
+            ?: throw IllegalStateException("Cannot access view in after view destroyed and before view creation")
+
+    var viewId: Int = -1
+
+    abstract fun getViewBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        attachToParent: Boolean = false
+    ): VB
 
     open fun onObserveData() {}
 
@@ -32,17 +38,24 @@ abstract class BaseFragment<DB : ViewDataBinding,VM:BaseViewModel>(@LayoutRes va
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding.lifecycleOwner=viewLifecycleOwner
+        _binding = getViewBinding(inflater, container)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewId = binding.root.id
         onPreInit(savedInstanceState)
         onObserveData()
         onInitView()
         onInitListener()
         clickHandling()
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     fun hideLoading() {
@@ -52,4 +65,7 @@ abstract class BaseFragment<DB : ViewDataBinding,VM:BaseViewModel>(@LayoutRes va
     fun showLoading() {
         (activity as BaseActivity<*>).showLoading()
     }
+
+
+
 }
