@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.flow
 class RandomPhotoRepository(private val unSplashApiService: UnsplashApiService) : BaseRepository() {
 
     fun getRandomPhoto(): Flow<NetworkState<List<UnsplashPhoto>>> = flow {
+        emit(NetworkState.Loading)
         emit(apiCallResponse { unSplashApiService.getRandomPhotos(5) })
     }
 }
